@@ -19,22 +19,22 @@ curl $(boot2docker ip):8080
 
 ### Docker Setup
 
-1) Install [Boot2Docker](https://github.com/boot2docker/osx-installer/releases/download/v1.7.1/Boot2Docker-1.7.1.pkg)
+Install [Boot2Docker](https://github.com/boot2docker/osx-installer/releases/download/v1.7.1/Boot2Docker-1.7.1.pkg)
   
-    After installation, run:
-    
-    ```
-    boot2docker init
-    boot2docker up
-    boot2docker shellinit
-    ```
+After installation, run:
 
-    Suggestion: Place the boot2docker env variables into your .bash_profile to load every new shell session
+```
+boot2docker init
+boot2docker up
+boot2docker shellinit
+```
+
+<b>Suggestion</b>: Place the boot2docker env variables into your .bash_profile to load every new shell session
     
-2) Install docker-compose CLI
+Install docker-compose CLI
  
-    ```
-    curl -L https://github.com/docker/compose/releases/download/1.3.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-    chmod +x /usr/local/bin/docker-compose
-    ```
+```
+curl -L https://github.com/docker/compose/releases/download/1.3.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+```
  
