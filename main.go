@@ -21,6 +21,14 @@ func formatJson(w http.ResponseWriter, resp *goes.Response, err error) {
     json.NewEncoder(w).Encode(resp)
 }
 
+func Index(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+    resp := map[string]string {
+        "status": "200",
+    }
+
+    json.NewEncoder(w).Encode(resp)
+}
+
 func CreateIndex(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
     mapping := map[string]interface{} {
         "settings": map[string]interface{} {
@@ -84,6 +92,7 @@ func Search(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 func main() {
 
     router := httprouter.New()
+    router.GET("/", Index)
     router.GET("/search/:indexName", Search)
     router.GET("/index/create/:indexName", CreateIndex)
     router.GET("/bulksend", BulkSend)
