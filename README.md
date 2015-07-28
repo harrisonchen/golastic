@@ -29,12 +29,12 @@ curl $(boot2docker ip):8080
     boot2docker shellinit
     ```
 
-  Suggestion: Place the boot2docker env variables into your .bash_profile to load every new shell session
+    Suggestion: Place the boot2docker env variables into your .bash_profile to load every new shell session
     
 2) Install docker-compose CLI
  
-  ```
+    ```
     curl -L https://github.com/docker/compose/releases/download/1.3.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-  chmod +x /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
     ```
  
