@@ -1,0 +1,9 @@
+server:
+  build: ./
+  links:
+    - elasticsearch:elasticsearch
+  ports:
+    - 8080:8080
+
+elasticsearch:
+  image: elasticsearch:1.6.0
