@@ -13,9 +13,7 @@ import (
 
 var conn *goes.Connection = goes.NewConnection("elasticsearch", "9200")
 
-func Search(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-    resp, err := search(conn)
-
+func formatJson(w http.ResponseWriter, resp *goes.Response, err error) {
     if err != nil {
         panic(err)
     }
@@ -23,7 +21,7 @@ func Search(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
     json.NewEncoder(w).Encode(resp)
 }
 
-func createIndex(conn *goes.Connection) (*goes.Response, error) {
+func CreateIndex(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
     mapping := map[string]interface{} {
         "settings": map[string]interface{} {
             "index.number_of_shards":   1,
@@ -41,14 +39,11 @@ func createIndex(conn *goes.Connection) (*goes.Response, error) {
         },
     }
 
-    return conn.CreateIndex("joker", mapping)
+    resp, err := conn.CreateIndex(ps.ByName("indexName"), mapping)
+    formatJson(w, resp, err)
 }
 
-func count(conn *goes.Connection) (*goes.Response, error) {
-    return conn.Count("asfd", []string{"joker"}, []string{"sdf"}, url.Values{})
-}
-
-func bulkSend(conn *goes.Connection) (*goes.Response, error) {
+func BulkSend(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
     d := goes.Document {
         Index: "joker",
         Type:  "good",
@@ -72,25 +67,26 @@ func bulkSend(conn *goes.Connection) (*goes.Response, error) {
     docs := []goes.Document{}
     docs = append(docs, d, d2)
 
-    return conn.BulkSend(docs)
+    resp, err := conn.BulkSend(docs)
+    formatJson(w, resp, err)
 }
 
-func search(conn *goes.Connection) (*goes.Response, error) {
+func Search(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
     var query = map[string]interface{}{
         "from":   0,
         "size":   100,
     }
 
-    return conn.Search(query, []string{"joker"}, []string{""}, url.Values{})
+    resp, err := conn.Search(query, []string{ps.ByName("indexName")}, []string{""}, url.Values{})
+    formatJson(w, resp, err)
 }
 
 func main() {
 
-    createIndex(conn)
-    bulkSend(conn)
-
     router := httprouter.New()
-    router.GET("/", Search)
+    router.GET("/search/:indexName", Search)
+    router.GET("/index/create/:indexName", CreateIndex)
+    router.GET("/bulksend", BulkSend)
 
     log.Fatal(http.ListenAndServe(":8080", router))
 }
